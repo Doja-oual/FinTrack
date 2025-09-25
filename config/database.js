@@ -7,8 +7,9 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-    logging: false, // Désactive les logs SQL
+    port: process.env.DB_PORT,
+    dialect: 'mysql',
+    logging: false, // Désactiver les logs SQL en production
     pool: {
       max: 5,
       min: 0,
@@ -17,5 +18,17 @@ const sequelize = new Sequelize(
     }
   }
 );
+
+// Test de connexion
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ Connexion à MySQL (Laragon) réussie');
+  } catch (error) {
+    console.error('❌ Erreur de connexion à la base de données:', error);
+  }
+};
+
+testConnection();
 
 module.exports = sequelize;
