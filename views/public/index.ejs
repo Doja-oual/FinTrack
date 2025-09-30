@@ -1,0 +1,272 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Tracker - Maîtrisez vos finances personnelles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-primary-600 p-2 rounded-lg">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800">Finance Tracker</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#features" class="text-gray-600 hover:text-primary-600 transition duration-200">Fonctionnalités</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-primary-600 transition duration-200">Comment ça marche</a>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/auth/login" class="text-primary-600 hover:text-primary-700 font-medium px-4 py-2 rounded-lg transition duration-200">
+                        Connexion
+                    </a>
+                    <a href="/auth/register" class="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2 rounded-lg transition duration-200">
+                        S'inscrire
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white">
+        <div class="container mx-auto px-6 py-20">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                    Maîtrisez vos <span class="text-blue-200">finances personnelles</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-blue-100 leading-relaxed">
+                    Suivez vos dépenses, créez des budgets intelligents et atteignez vos objectifs d'épargne.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/auth/register" class="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition duration-200 flex items-center justify-center">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Commencer gratuitement
+                    </a>
+                    <a href="#features" class="border-2 border-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-600 transition duration-200 flex items-center justify-center">
+                        <i class="fas fa-play mr-2"></i>
+                        Découvrir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Tout ce dont vous avez besoin</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Une suite complète d'outils pour gérer efficacement vos finances personnelles.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Gestion des transactions -->
+                <div class="bg-gray-50 p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="bg-blue-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-exchange-alt text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Gestion des transactions</h3>
+                    <p class="text-gray-600 mb-4">
+                        Ajoutez, modifiez et catégorisez vos revenus et dépenses en quelques clics.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Ajout rapide de transactions</li>
+                        <li>• Catégorisation automatique</li>
+                        <li>• Export CSV/Excel</li>
+                    </ul>
+                </div>
+                
+                <!-- Budgets intelligents -->
+                <div class="bg-gray-50 p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="bg-green-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-pie text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Budgets intelligents</h3>
+                    <p class="text-gray-600 mb-4">
+                        Créez des budgets par catégorie et recevez des alertes avant dépassement.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Budgets mensuels/annuels</li>
+                        <li>• Alertes de dépassement</li>
+                        <li>• Suggestions d'optimisation</li>
+                    </ul>
+                </div>
+                
+                <!-- Objectifs d'épargne -->
+                <div class="bg-gray-50 p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="bg-purple-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-piggy-bank text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Objectifs d'épargne</h3>
+                    <p class="text-gray-600 mb-4">
+                        Définissez vos objectifs et suivez votre progression avec des visualisations.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Objectifs personnalisés</li>
+                        <li>• Suivi de progression</li>
+                        <li>• Conseils d'épargne</li>
+                    </ul>
+                </div>
+                
+                <!-- Analyses visuelles -->
+                <div class="bg-gray-50 p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="bg-yellow-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Analyses visuelles</h3>
+                    <p class="text-gray-600 mb-4">
+                        Visualisez vos données avec des graphiques interactifs et rapports détaillés.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Graphiques interactifs</li>
+                        <li>• Rapports mensuels</li>
+                        <li>• Tendances et prévisions</li>
+                    </ul>
+                </div>
+                
+                <!-- Sécurité -->
+                <div class="bg-gray-50 p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="bg-red-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Sécurité maximale</h3>
+                    <p class="text-gray-600 mb-4">
+                        Vos données sont protégées avec un chiffrement de niveau bancaire.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Chiffrement 256-bit</li>
+                        <li>• Authentification 2FA</li>
+                        <li>• Sauvegardes quotidiennes</li>
+                    </ul>
+                </div>
+                
+                <!-- Multi-devises -->
+                <div class="bg-gray-50 p-8 rounded-xl hover:shadow-lg transition duration-300">
+                    <div class="bg-indigo-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-globe text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Multi-devises</h3>
+                    <p class="text-gray-600 mb-4">
+                        Gérez vos finances dans plusieurs devises avec taux en temps réel.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• 150+ devises supportées</li>
+                        <li>• Taux en temps réel</li>
+                        <li>• Conversion automatique</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gray-800 text-white py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-4">Prêt à prendre le contrôle de vos finances ?</h2>
+            <p class="text-xl text-gray-300 mb-8">Rejoignez des milliers d'utilisateurs satisfaits.</p>
+            <a href="/auth/register" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg text-lg transition duration-200 inline-flex items-center">
+                <i class="fas fa-arrow-right mr-2"></i>
+                Commencer maintenant
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-primary-600 p-2 rounded-lg">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">Finance Tracker</span>
+                    </div>
+                    <p class="text-gray-400">
+                        La solution complète pour gérer vos finances personnelles.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Fonctionnalités</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Gestion des transactions</li>
+                        <li>Budgets intelligents</li>
+                        <li>Objectifs d'épargne</li>
+                        <li>Rapports détaillés</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Centre d'aide</li>
+                        <li>Nous contacter</li>
+                        <li>FAQ</li>
+                        <li>Tutoriels</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Légal</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Conditions d'utilisation</li>
+                        <li>Politique de confidentialité</li>
+                        <li>Mentions légales</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Finance Tracker. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animation des éléments au scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.bg-gray-50').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease-out';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
+

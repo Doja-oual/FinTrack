@@ -23,9 +23,9 @@ const sequelize = new Sequelize(
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Connexion à MySQL (Laragon) réussie');
+    console.log('Connexion à MySQL (Laragon) réussie');
   } catch (error) {
-    console.error('❌ Erreur de connexion à la base de données:', error);
+    console.error(' Erreur de connexion à la base de données:', error);
   }
 };
 

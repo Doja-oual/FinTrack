@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FinSolutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-blue-600">FinSolutions</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/transactions" class="text-gray-700 hover:text-blue-600">Transactions</a>
+                    <a href="/budgets" class="text-gray-700 hover:text-blue-600">Budgets</a>
+                    <a href="/savings" class="text-gray-700 hover:text-blue-600">Épargne</a>
+                    <a href="/auth/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                        Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-8">
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800">Tableau de bord</h2>
+            <p class="text-gray-600 mt-2">Bienvenue sur votre espace financier</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Solde Total -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Solde Total</p>
+                        <p class="text-3xl font-bold mt-2">0.00 DH</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-3">
+                        <i class="fas fa-wallet text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenus du mois -->
+            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm">Revenus ce mois</p>
+                        <p class="text-3xl font-bold mt-2">0.00 DH</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-3">
+                        <i class="fas fa-arrow-up text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dépenses du mois -->
+            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-red-100 text-sm">Dépenses ce mois</p>
+                        <p class="text-3xl font-bold mt-2">0.00 DH</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-3">
+                        <i class="fas fa-arrow-down text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Économies -->
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm">Économies</p>
+                        <p class="text-3xl font-bold mt-2">0.00 DH</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-3">
+                        <i class="fas fa-piggy-bank text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <a href="/transactions/new" class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-100 rounded-full p-3">
+                        <i class="fas fa-plus text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Nouvelle Transaction</h3>
+                        <p class="text-gray-600 text-sm">Ajouter un revenu ou une dépense</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/budgets/new" class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-green-100 rounded-full p-3">
+                        <i class="fas fa-chart-pie text-green-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Créer un Budget</h3>
+                        <p class="text-gray-600 text-sm">Définir un budget mensuel</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/savings/new" class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-purple-100 rounded-full p-3">
+                        <i class="fas fa-bullseye text-purple-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Objectif d'Épargne</h3>
+                        <p class="text-gray-600 text-sm">Fixer un nouvel objectif</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Recent Transactions & Goals -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Transactions récentes -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Transactions Récentes</h3>
+                <div class="space-y-4">
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-receipt text-4xl mb-3"></i>
+                        <p>Aucune transaction pour le moment</p>
+                        <a href="/transactions/new" class="text-blue-600 hover:underline mt-2 inline-block">
+                            Ajouter votre première transaction
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Objectifs d'épargne -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Objectifs d'Épargne</h3>
+                <div class="space-y-4">
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-bullseye text-4xl mb-3"></i>
+                        <p>Aucun objectif défini</p>
+                        <a href="/savings/new" class="text-blue-600 hover:underline mt-2 inline-block">
+                            Créer votre premier objectif
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

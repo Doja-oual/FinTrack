@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Finance Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 min-h-screen flex items-center justify-center p-4">
+    <!-- Conteneur principal -->
+    <div class="w-full max-w-md">
+        <!-- Carte de connexion -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8 transform transition-all duration-500 hover:scale-105">
+            <!-- Header avec logo -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-full mb-4">
+                    <i class="fas fa-chart-line text-primary-600 text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Bon retour !</h1>
+                <p class="text-gray-600">Connectez-vous à votre compte Finance Tracker</p>
+            </div>
+
+            <!-- Messages d'erreur -->
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-circle text-red-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-red-700 font-medium"><%= error %></p>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Messages de succès -->
+            <% if (typeof success !== 'undefined' && success) { %>
+                <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-green-700 font-medium"><%= success %></p>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Formulaire de connexion -->
+            <form action="/auth/login" method="POST" class="space-y-6" novalidate>
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Adresse email
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required 
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition duration-200 bg-gray-50 focus:bg-white"
+                            placeholder="votre@email.com"
+                            value="<%= typeof formData !== 'undefined' ? formData.email || '' : '' %>"
+                        >
+                    </div>
+                </div>
+
+                <!-- Mot de passe -->
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Mot de passe
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            required 
+                            class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition duration-200 bg-gray-50 focus:bg-white"
+                            placeholder="••••••••"
+                        >
+                        <button 
+                            type="button" 
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary-600 transition duration-200"
+                            onclick="togglePassword('password')"
+                        >
+                            <i class="fas fa-eye" id="password-toggle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Options -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center cursor-pointer">
+                        <input 
+                            type="checkbox" 
+                            name="remember" 
+                            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded transition duration-200"
+                        >
+                        <span class="ml-2 text-sm text-gray-700">Se souvenir de moi</span>
+                    </label>
+                    <a href="/auth/forgot-password" class="text-sm text-primary-600 hover:text-primary-500 font-medium transition duration-200">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+
+                <!-- Bouton de connexion -->
+                <button 
+                    type="submit" 
+                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 flex items-center justify-center"
+                    id="loginBtn"
+                >
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    <span>Se connecter</span>
+                </button>
+
+                <!-- Divider -->
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Ou</span>
+                    </div>
+                </div>
+
+                <!-- Lien inscription -->
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Nouveau sur Finance Tracker ? 
+                        <a href="/auth/register" class="text-primary-600 hover:text-primary-500 font-semibold transition duration-200">
+                            Créer un compte gratuitement
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Retour à l'accueil -->
+        <div class="text-center mt-6">
+            <a href="/" class="text-white hover:text-blue-200 transition duration-200 flex items-center justify-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Retour à l'accueil
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const toggle = document.getElementById(fieldId + '-toggle');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                toggle.classList.remove('fa-eye');
+                toggle.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                toggle.classList.remove('fa-eye-slash');
+                toggle.classList.add('fa-eye');
+            }
+        }
+
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.bg-white');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease-out';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // Validation du formulaire
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const submitBtn = document.getElementById('loginBtn');
+            
+            // Reset des styles d'erreur
+            [email, password].forEach(field => {
+                field.classList.remove('border-red-500', 'ring-red-500');
+            });
+            
+            let isValid = true;
+            
+            // Validation email
+            if (!email.value.trim() || !email.validity.valid) {
+                email.classList.add('border-red-500', 'ring-red-500');
+                isValid = false;
+            }
+            
+            // Validation mot de passe
+            if (!password.value.trim()) {
+                password.classList.add('border-red-500', 'ring-red-500');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+                // Animation d'erreur
+                document.querySelector('.bg-white').classList.add('animate-pulse');
+                setTimeout(() => {
+                    document.querySelector('.bg-white').classList.remove('animate-pulse');
+                }, 1000);
+            } else {
+                // Animation de chargement
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Connexion...</span>';
+                submitBtn.disabled = true;
+            }
+        });
+
+        // Focus automatique sur le champ email
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailField = document.getElementById('email');
+            if (emailField && !emailField.value) {
+                emailField.focus();
+            }
+        });
+
+        // Amélioration UX : Enter pour soumettre
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const form = document.querySelector('form');
+                const submitBtn = document.getElementById('loginBtn');
+                if (form && !submitBtn.disabled) {
+                    form.submit();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
