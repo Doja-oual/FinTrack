@@ -7,7 +7,7 @@ module.exports = {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true,  // CORRIGÉ: était "autIncrement"
+        autoIncrement: true,  
         allowNull: false
       },
       name: {
@@ -28,8 +28,8 @@ module.exports = {
         defaultValue: '#6c757d',
         allowNull: false
       },
-      // SUPPRIMÉ: doublon de color
-      user_id: {  // CORRIGÉ: directement user_id
+      
+      user_id: {  
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
@@ -39,17 +39,17 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      is_default: {  // CORRIGÉ: directement is_default
+      is_default: {  
         type: Sequelize.BOOLEAN,
         defaultValue: false,
         allowNull: false
       },
-      created_at: {  // CORRIGÉ: directement created_at
+      created_at: {  
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updated_at: {  // CORRIGÉ: directement updated_at
+      updated_at: {  
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')

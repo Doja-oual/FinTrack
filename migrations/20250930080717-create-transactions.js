@@ -55,7 +55,7 @@ module.exports = {
       }
     });
 
-    // Ajouter les index
+    
     await queryInterface.addIndex('transactions', ['user_id', 'date']);
     await queryInterface.addIndex('transactions', ['category_id']);
     await queryInterface.addIndex('transactions', ['type']);

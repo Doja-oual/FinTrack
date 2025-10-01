@@ -1,277 +1,287 @@
+// ============================================
+// FinSolutions - Application de Gestion de Budget
+// Fichier: app.js (Version Complète et Corrigée)
+// ============================================
 
-
-const express = require('express');
+// Chargement des variables d'environnement
 require('dotenv').config();
-const bcrypt = require("bcrypt");
-const path = require('path');
-const { body, validationResult } = require('express-validator');
-const { User } = require('./models');
 
+// Importation des modules nécessaires
+const express = require('express');
+const session = require('express-session');
+const path = require('path');
+
+// Importation de la base de données et des modèles
+const { testConnection, syncDatabase, Transaction, Budget, Category } = require('./models');
+const { Op } = require('sequelize');
+
+// Importation des routes
+const authRoutes = require('./routes/auth');
+const categoryRoutes = require('./routes/categories');
+const transactionRoutes = require('./routes/transactions');
+const budgetRoutes = require('./routes/budgets');
+
+// Initialisation de l'application Express
 const app = express();
 
-// Import du modèle simple
-const db = require('./models');
-
-// ===== NOUVELLE CONFIGURATION POUR LES VUES EJS =====
+// ============================================
+// CONFIGURATION DES VUES (EJS)
+// ============================================
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware pour les fichiers statiques (CSS, JS, images)
+// ============================================
+// MIDDLEWARES
+// ============================================
+
+// Middleware pour servir les fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middlewares existants
-app.use(express.json());
+// Middleware pour parser les données des formulaires
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// ===== ROUTES POUR AFFICHER LES VUES =====
+// Configuration des sessions
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'votre_secret_tres_securise_changez_moi',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24
+  }
+}));
 
-// Route page d'accueil (remplace votre route existante)
+// Middleware pour logger les requêtes
+app.use((req, res, next) => {
+  const timestamp = new Date().toLocaleTimeString('fr-FR');
+  console.log(`[${timestamp}] ${req.method} ${req.url}`);
+  next();
+});
+
+// Middleware pour rendre les données de session disponibles
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  res.locals.isAuthenticated = !!req.session.user;
+  next();
+});
+
+// ============================================
+// MIDDLEWARE D'AUTHENTIFICATION
+// ============================================
+const requireAuth = (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  next();
+};
+
+// ============================================
+// ROUTES
+// ============================================
+
+// Page d'accueil
 app.get('/', (req, res) => {
-    res.render('public/index');
-});
-
-// Routes d'authentification GET (affichage des pages)
-app.get('/auth/login', (req, res) => {
-    res.render('auth/login');
-});
-
-app.get('/auth/register', (req, res) => {
-    res.render('auth/register');
-});
-
-app.get('/auth/forgot-password', (req, res) => {
-    res.render('auth/forgot-password');
-});
-
-app.get('/auth/reset-password/:token', (req, res) => {
-    res.render('auth/reset-password', { 
-        token: req.params.token 
+  try {
+    res.render('home', { 
+      title: 'Accueil - FinSolutions',
+      description: 'Application de gestion de budget personnel'
     });
+  } catch (error) {
+    console.error('Erreur page d\'accueil:', error);
+    res.status(500).send('Erreur lors du chargement de la page');
+  }
 });
 
-// ===== MISE À JOUR DE VOTRE ROUTE REGISTER EXISTANTE =====
+// Routes d'authentification
+app.use('/', authRoutes);
 
-// Validation middleware pour l'inscription
-const registerValidation = [
-    body('firstName').notEmpty().withMessage('Le prénom est requis'),
-    body('lastName').notEmpty().withMessage('Le nom est requis'),
-    body('email').isEmail().withMessage('Email invalide'),
-    body('password').isLength({ min: 8 }).withMessage('Le mot de passe doit contenir au moins 8 caractères')
-        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/).withMessage('Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre'),
-    body('confirmPassword').custom((value, { req }) => {
-        if (value !== req.body.password) {
-            throw new Error('Les mots de passe ne correspondent pas');
-        }
-        return true;
-    }),
-    body('terms').equals('on').withMessage('Vous devez accepter les conditions d\'utilisation')
-];
+// Routes catégories
+app.use('/', categoryRoutes);
 
-// Route POST mise à jour pour l'inscription
-app.post('/auth/register', registerValidation, async (req, res) => {
-    try {
-        const errors = validationResult(req);
-        
-        if (!errors.isEmpty()) {
-            return res.render('auth/register', {
-                errors: errors.array(),
-                formData: req.body
-            });
-        }
+// Routes transactions
+app.use('/', transactionRoutes);
 
-        const { firstName, lastName, email, password } = req.body;
+// Routes budgets
+app.use('/', budgetRoutes);
 
-        const findUser = await User.findOne({ where: { email } });
-        if (findUser) {
-            return res.render('auth/register', {
-                errors: [{ msg: 'Un compte existe déjà avec cet email' }],
-                formData: req.body
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        
-        // Création de l'utilisateur avec prénom et nom
-        await User.create({ 
-            firstName,
-            lastName,
-            email, 
-            password: hashedPassword 
-        });
-
-        // Redirection vers login avec message de succès
-        res.render('auth/login', {
-            success: 'Compte créé avec succès ! Vous pouvez vous connecter.'
-        });
-
-    } catch (error) {
-        console.error('Erreur lors de l\'inscription:', error);
-        res.render('auth/register', {
-            errors: [{ msg: 'Erreur serveur. Veuillez réessayer.' }],
-            formData: req.body
-        });
-    }
-});
-
-// ===== NOUVELLE ROUTE LOGIN =====
-
-// Validation middleware pour la connexion
-const loginValidation = [
-    body('email').isEmail().withMessage('Email invalide'),
-    body('password').notEmpty().withMessage('Le mot de passe est requis')
-];
-
-app.post('/auth/login', loginValidation, async (req, res) => {
-    try {
-        const errors = validationResult(req);
-        
-        if (!errors.isEmpty()) {
-            return res.render('auth/login', {
-                errors: errors.array(),
-                formData: req.body
-            });
-        }
-
-        const { email, password } = req.body;
-
-        // Rechercher l'utilisateur
-        const user = await User.findOne({ where: { email } });
-        
-        if (!user) {
-            return res.render('auth/login', {
-                error: 'Email ou mot de passe incorrect',
-                formData: req.body
-            });
-        }
-
-        // Vérifier le mot de passe
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        
-        if (!isValidPassword) {
-            return res.render('auth/login', {
-                error: 'Email ou mot de passe incorrect',
-                formData: req.body
-            });
-        }
-
-        // Connexion réussie - redirection vers dashboard
-        res.redirect('/dashboard');
-
-    } catch (error) {
-        console.error('Erreur lors de la connexion:', error);
-        res.render('auth/login', {
-            error: 'Erreur serveur. Veuillez réessayer.',
-            formData: req.body
-        });
-    }
-});
-
-app.get('/dashboard', (req, res) => {
-    res.render('dashboard/index');
-});
-
-
-// ===== ROUTE FORGOT PASSWORD =====
-app.post('/auth/forgot-password', [
-    body('email').isEmail().withMessage('Email invalide')
-], async (req, res) => {
-    try {
-        const errors = validationResult(req);
-        
-        if (!errors.isEmpty()) {
-            return res.render('auth/forgot-password', {
-                errors: errors.array(),
-                formData: req.body
-            });
-        }
-
-        const { email } = req.body;
-
-        // Vérifier si l'utilisateur existe
-        const user = await User.findOne({ where: { email } });
-        
-        if (!user) {
-            return res.render('auth/forgot-password', {
-                error: 'Aucun compte trouvé avec cet email'
-            });
-        }
-
-        // TODO: Implémenter l'envoi d'email avec nodemailer
-        // Pour l'instant, simulation
-        res.render('auth/forgot-password', {
-            success: 'Un email de réinitialisation a été envoyé à ' + email
-        });
-
-    } catch (error) {
-        console.error('Erreur mot de passe oublié:', error);
-        res.render('auth/forgot-password', {
-            error: 'Erreur serveur. Veuillez réessayer.'
-        });
-    }
-});
-
-// ===== GARDER VOS ROUTES EXISTANTES =====
-
-// Register route API (gardez-la pour l'API)
-app.post('/register', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        const findUser = await User.findOne({ where: { email } });
-        if (findUser) {
-            return res.status(400).send("Utilisateur déjà enregistré");
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await User.create({ email, password: hashedPassword });
-
-        res.status(201).send({ message: "registration successful" });
-    } catch (error) {
-        res.status(500).send({ message: error.message });
-    }
-});
-
-// Route de test de la base
-app.get('/test-db', async (req, res) => {
-    try {
-        const sequelize = require('./config/database');
-        await sequelize.authenticate();
-        res.json({
-            success: true,
-            message: 'Connexion à la base réussie'
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-});
-
-// ===== GESTION DES ERREURS 404 =====
-app.use('*', (req, res) => {
-    res.status(404).render('auth/login', {
-        error: 'Page non trouvée. Redirection vers la connexion.'
+// Route Dashboard avec données complètes
+app.get('/dashboard', requireAuth, async (req, res) => {
+  try {
+    // Date actuelle
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    
+    // Récupérer les transactions du mois
+    const transactions = await Transaction.findAll({
+      where: {
+        userId: req.session.user.id,
+        date: { [Op.between]: [firstDay, lastDay] }
+      },
+      include: [{ model: Category, as: 'category' }],
+      order: [['date', 'DESC']]
     });
+    
+    // Calculs des statistiques
+    const totalIncome = transactions
+      .filter(t => t.type === 'income')
+      .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+    
+    const totalExpense = transactions
+      .filter(t => t.type === 'expense')
+      .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+    
+    const balance = totalIncome - totalExpense;
+    const incomeCount = transactions.filter(t => t.type === 'income').length;
+    const expenseCount = transactions.filter(t => t.type === 'expense').length;
+    
+    // Récupérer les budgets du mois
+    const budgets = await Budget.findAll({
+      where: {
+        userId: req.session.user.id,
+        month: now.getMonth() + 1,
+        year: now.getFullYear()
+      },
+      include: [{ model: Category, as: 'category' }]
+    });
+    
+    // Calculer les stats des budgets
+    const budgetsWithStats = await Promise.all(budgets.map(async (budget) => {
+      const spent = await Transaction.sum('amount', {
+        where: {
+          categoryId: budget.categoryId,
+          userId: req.session.user.id,
+          type: 'expense',
+          date: { [Op.between]: [firstDay, lastDay] }
+        }
+      }) || 0;
+      
+      const percentage = (spent / budget.amount) * 100;
+      
+      return {
+        ...budget.toJSON(),
+        spent,
+        percentage,
+        isOverBudget: spent > budget.amount,
+        isNearLimit: percentage >= budget.alertThreshold
+      };
+    }));
+    
+    // Rendre la vue avec toutes les données
+    res.render('dashboard/index', {
+      title: 'Dashboard',
+      user: req.session.user,
+      totalIncome,
+      totalExpense,
+      balance,
+      incomeCount,
+      expenseCount,
+      budgetCount: budgets.length,
+      recentTransactions: transactions.slice(0, 5),
+      recentBudgets: budgetsWithStats
+    });
+    
+  } catch (error) {
+    console.error('Erreur dashboard:', error);
+    res.status(500).send('Erreur lors du chargement du dashboard');
+  }
 });
 
-
-db.sequelize.sync({ alter: false })
-  .then(() => {
-    console.log(' Base de données synchronisée');
-  })
-  .catch(err => {
-    console.error(' Erreur de synchronisation:', err);
+// Route de déconnexion
+app.get('/logout', (req, res) => {
+  const userEmail = req.session.user ? req.session.user.email : 'Utilisateur';
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Erreur lors de la déconnexion:', err);
+      return res.redirect('/dashboard');
+    }
+    console.log('Déconnexion:', userEmail);
+    res.redirect('/');
   });
-
-const PORT = process.env.SERVER_PORT || 3000;
-app.listen(PORT, () => {
-    console.log(` Serveur FinSolutions démarré sur http://localhost:${PORT}`);
-    console.log(' Pages disponibles :');
-    console.log(`   • Accueil:        http://localhost:${PORT}/`);
-    console.log(`   • Connexion:      http://localhost:${PORT}/auth/login`);
-    console.log(`   • Inscription:    http://localhost:${PORT}/auth/register`);
-    console.log(`   • Mot de passe:   http://localhost:${PORT}/auth/forgot-password`);
-    console.log(`   • Dashboard:      http://localhost:${PORT}/dashboard`);
-    console.log(`   • Test DB:        http://localhost:${PORT}/test-db`);
 });
+
+// ============================================
+// GESTION DES ERREURS
+// ============================================
+
+// Route 404 - Page non trouvée
+app.use((req, res) => {
+  res.status(404).render('404', {
+    title: 'Page non trouvée',
+    message: 'La page que vous recherchez n\'existe pas',
+    url: req.url
+  });
+});
+
+// Gestionnaire d'erreurs global
+app.use((err, req, res, next) => {
+  console.error('\n=== ERREUR GLOBALE ===');
+  console.error('Message:', err.message);
+  console.error('Stack:', err.stack);
+  console.error('=====================\n');
+  
+  res.status(err.status || 500).render('error', {
+    title: 'Erreur',
+    message: process.env.NODE_ENV === 'development' 
+      ? err.message 
+      : 'Une erreur est survenue sur le serveur'
+  });
+});
+
+// ============================================
+// DÉMARRAGE DU SERVEUR
+// ============================================
+
+const PORT = process.env.PORT || 3000;
+
+const startServer = async () => {
+  try {
+    console.log('\n Initialisation de l\'application FinSolutions...\n');
+
+    console.log(' Test de connexion à MySQL...');
+    const isConnected = await testConnection();
+    
+    if (!isConnected) {
+      console.error('\n ERREUR: Impossible de se connecter à MySQL');
+      process.exit(1);
+    }
+
+    console.log('\n Synchronisation de la base de données...');
+    await syncDatabase();
+
+    const server = app.listen(PORT, () => {
+      console.log('\n' + '='.repeat(60));
+      console.log(' Serveur FinSolutions démarré avec succès !');
+      console.log('='.repeat(60));
+      console.log(` URL locale:        http://localhost:${PORT}`);
+      console.log(` Base de données:   ${process.env.DB_NAME || 'finsolutions'}`);
+      console.log(` Environnement:     ${process.env.NODE_ENV || 'development'}`);
+      console.log('='.repeat(60));
+      console.log('\n Appuyez sur Ctrl+C pour arrêter\n');
+    }).on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`\n ERREUR: Le port ${PORT} est déjà utilisé !`);
+        console.error('Solution: taskkill /IM node.exe /F\n');
+        process.exit(1);
+      }
+    });
+
+    process.on('SIGINT', () => {
+      console.log('\n  Arrêt du serveur...');
+      server.close(() => {
+        console.log(' Serveur arrêté\n');
+        process.exit(0);
+      });
+    });
+
+  } catch (error) {
+    console.error('\n ERREUR FATALE:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
+
+module.exports = app;

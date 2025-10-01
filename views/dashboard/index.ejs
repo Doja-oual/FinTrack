@@ -6,35 +6,9 @@
     <title>Dashboard - FinSolutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        rose: {
-                            50: '#fff1f2',
-                            100: '#ffe4e6',
-                            200: '#fecdd3',
-                            300: '#fda4af',
-                            400: '#fb7185',
-                            500: '#f43f5e',
-                            600: '#e11d48',
-                        },
-                        lavender: {
-                            50: '#faf5ff',
-                            100: '#f3e8ff',
-                            200: '#e9d5ff',
-                            300: '#d8b4fe',
-                            400: '#c084fc',
-                            500: '#a855f7',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-purple-50 to-rose-50 min-h-screen">
+    <!-- Navbar -->
     <nav class="bg-white/80 backdrop-blur-md shadow-lg border-b border-pink-100">
         <div class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
@@ -55,14 +29,14 @@
                         <i class="fas fa-chart-pie"></i>
                         <span class="hidden md:inline">Budgets</span>
                     </a>
-                    <a href="/savings" class="text-gray-600 hover:text-rose-500 transition flex items-center space-x-2">
-                        <i class="fas fa-piggy-bank"></i>
-                        <span class="hidden md:inline">Épargne</span>
+                    <a href="/categories" class="text-gray-600 hover:text-rose-500 transition flex items-center space-x-2">
+                        <i class="fas fa-tags"></i>
+                        <span class="hidden md:inline">Catégories</span>
                     </a>
-                    <button class="bg-gradient-to-r from-pink-400 to-rose-400 text-white px-5 py-2 rounded-full hover:from-pink-500 hover:to-rose-500 transition shadow-md">
+                    <a href="/logout" class="bg-gradient-to-r from-pink-400 to-rose-400 text-white px-5 py-2 rounded-full hover:from-pink-500 hover:to-rose-500 transition shadow-md">
                         <i class="fas fa-sign-out-alt mr-2"></i>
                         <span class="hidden md:inline">Déconnexion</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -70,18 +44,18 @@
 
     <!-- Contenu Principal -->
     <div class="container mx-auto px-6 py-8">
-        <!-- Section Bienvenue avec des coeurs décoratifs -->
+        <!-- Section Bienvenue -->
         <div class="mb-8 relative">
             <div class="absolute -top-4 -left-4 text-pink-200 text-6xl opacity-20">
                 <i class="fas fa-heart"></i>
             </div>
             <div class="relative">
-                <h2 class="text-4xl font-bold text-gray-800 mb-2">Bonjour ! ✨</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-2">Bonjour <%= user.firstName %> !</h2>
                 <p class="text-gray-600">Voici un aperçu de vos finances aujourd'hui</p>
             </div>
         </div>
 
-        <!-- Cartes de statistiques avec design féminin -->
+        <!-- Cartes de statistiques -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Solde Total -->
             <div class="bg-white rounded-3xl shadow-xl p-6 border-2 border-pink-100 hover:shadow-2xl transition transform hover:-translate-y-1">
@@ -92,11 +66,11 @@
                 </div>
                 <p class="text-gray-500 text-sm font-medium mb-1">Solde Total</p>
                 <p class="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
-                    0.00 DH
+                    <%= balance ? balance.toFixed(2) : '0.00' %> MAD
                 </p>
-                <div class="mt-3 flex items-center text-sm text-green-500">
-                    <i class="fas fa-arrow-up mr-1"></i>
-                    <span>+5.2% ce mois</span>
+                <div class="mt-3 flex items-center text-sm <%= balance >= 0 ? 'text-green-500' : 'text-red-500' %>">
+                    <i class="fas <%= balance >= 0 ? 'fa-arrow-up' : 'fa-arrow-down' %> mr-1"></i>
+                    <span><%= balance >= 0 ? 'Positif' : 'Négatif' %></span>
                 </div>
             </div>
 
@@ -109,11 +83,11 @@
                 </div>
                 <p class="text-gray-500 text-sm font-medium mb-1">Revenus ce mois</p>
                 <p class="text-3xl font-bold bg-gradient-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
-                    0.00 DH
+                    <%= totalIncome ? totalIncome.toFixed(2) : '0.00' %> MAD
                 </p>
                 <div class="mt-3 flex items-center text-sm text-purple-500">
                     <i class="fas fa-sparkles mr-1"></i>
-                    <span>En progression</span>
+                    <span><%= incomeCount || 0 %> transaction(s)</span>
                 </div>
             </div>
 
@@ -126,40 +100,40 @@
                 </div>
                 <p class="text-gray-500 text-sm font-medium mb-1">Dépenses ce mois</p>
                 <p class="text-3xl font-bold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
-                    0.00 DH
+                    <%= totalExpense ? totalExpense.toFixed(2) : '0.00' %> MAD
                 </p>
-                <div class="mt-3 flex items-center text-sm text-gray-400">
-                    <i class="fas fa-minus mr-1"></i>
-                    <span>Sous contrôle</span>
+                <div class="mt-3 flex items-center text-sm text-gray-500">
+                    <i class="fas fa-shopping-cart mr-1"></i>
+                    <span><%= expenseCount || 0 %> transaction(s)</span>
                 </div>
             </div>
 
-            <!-- Économies -->
+            <!-- Budgets -->
             <div class="bg-white rounded-3xl shadow-xl p-6 border-2 border-amber-100 hover:shadow-2xl transition transform hover:-translate-y-1">
                 <div class="flex items-center justify-between mb-4">
                     <div class="bg-gradient-to-br from-amber-400 to-yellow-400 rounded-2xl p-4 shadow-lg">
-                        <i class="fas fa-piggy-bank text-white text-2xl"></i>
+                        <i class="fas fa-chart-pie text-white text-2xl"></i>
                     </div>
                 </div>
-                <p class="text-gray-500 text-sm font-medium mb-1">Objectifs d'épargne</p>
+                <p class="text-gray-500 text-sm font-medium mb-1">Budgets Actifs</p>
                 <p class="text-3xl font-bold bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
-                    0.00 DH
+                    <%= budgetCount || 0 %>
                 </p>
                 <div class="mt-3 flex items-center text-sm text-amber-500">
                     <i class="fas fa-star mr-1"></i>
-                    <span>Continue comme ça!</span>
+                    <span>Ce mois-ci</span>
                 </div>
             </div>
         </div>
 
-        <!-- Actions Rapides avec boutons arrondis -->
+        <!-- Actions Rapides -->
         <div class="mb-8">
             <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
                 <i class="fas fa-magic text-pink-400 mr-3"></i>
                 Actions Rapides
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <a href="/transactions/new" class="group bg-gradient-to-br from-pink-400 to-rose-400 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition transform hover:-translate-y-2 text-white">
+                <a href="/transactions/create" class="group bg-gradient-to-br from-pink-400 to-rose-400 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition transform hover:-translate-y-2 text-white">
                     <div class="flex flex-col items-center text-center">
                         <div class="bg-white/20 backdrop-blur rounded-full p-6 mb-4 group-hover:scale-110 transition">
                             <i class="fas fa-plus text-4xl"></i>
@@ -169,7 +143,7 @@
                     </div>
                 </a>
 
-                <a href="/budgets/new" class="group bg-gradient-to-br from-purple-400 to-indigo-400 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition transform hover:-translate-y-2 text-white">
+                <a href="/budgets/create" class="group bg-gradient-to-br from-purple-400 to-indigo-400 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition transform hover:-translate-y-2 text-white">
                     <div class="flex flex-col items-center text-center">
                         <div class="bg-white/20 backdrop-blur rounded-full p-6 mb-4 group-hover:scale-110 transition">
                             <i class="fas fa-chart-pie text-4xl"></i>
@@ -179,19 +153,19 @@
                     </div>
                 </a>
 
-                <a href="/savings/new" class="group bg-gradient-to-br from-amber-400 to-yellow-400 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition transform hover:-translate-y-2 text-white">
+                <a href="/categories/create" class="group bg-gradient-to-br from-amber-400 to-yellow-400 rounded-3xl shadow-xl p-8 hover:shadow-2xl transition transform hover:-translate-y-2 text-white">
                     <div class="flex flex-col items-center text-center">
                         <div class="bg-white/20 backdrop-blur rounded-full p-6 mb-4 group-hover:scale-110 transition">
-                            <i class="fas fa-bullseye text-4xl"></i>
+                            <i class="fas fa-tags text-4xl"></i>
                         </div>
-                        <h4 class="font-bold text-xl mb-2">Objectif d'Épargne</h4>
-                        <p class="text-amber-100 text-sm">Fixer un nouvel objectif financier</p>
+                        <h4 class="font-bold text-xl mb-2">Nouvelle Catégorie</h4>
+                        <p class="text-amber-100 text-sm">Organiser vos transactions</p>
                     </div>
                 </a>
             </div>
         </div>
 
-        <!-- Section Transactions et Objectifs -->
+        <!-- Section Transactions et Budgets -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Transactions récentes -->
             <div class="bg-white/80 backdrop-blur rounded-3xl shadow-xl p-8 border-2 border-pink-100">
@@ -205,41 +179,76 @@
                     </a>
                 </div>
                 <div class="space-y-4">
-                    <div class="text-center py-12">
-                        <div class="inline-block bg-pink-100 rounded-full p-6 mb-4">
-                            <i class="fas fa-receipt text-pink-400 text-4xl"></i>
+                    <% if (recentTransactions && recentTransactions.length > 0) { %>
+                        <% recentTransactions.slice(0, 5).forEach(transaction => { %>
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3 <%= transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100' %>">
+                                        <i class="fas <%= transaction.type === 'income' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' %>"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-800"><%= transaction.description || 'Sans description' %></p>
+                                        <p class="text-xs text-gray-500"><%= new Date(transaction.date).toLocaleDateString('fr-FR') %></p>
+                                    </div>
+                                </div>
+                                <span class="font-bold <%= transaction.type === 'income' ? 'text-green-600' : 'text-red-600' %>">
+                                    <%= transaction.type === 'income' ? '+' : '-' %><%= parseFloat(transaction.amount).toFixed(2) %> MAD
+                                </span>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="text-center py-12">
+                            <div class="inline-block bg-pink-100 rounded-full p-6 mb-4">
+                                <i class="fas fa-receipt text-pink-400 text-4xl"></i>
+                            </div>
+                            <p class="text-gray-500 mb-3">Aucune transaction pour le moment</p>
+                            <a href="/transactions/create" class="inline-block bg-gradient-to-r from-pink-400 to-rose-400 text-white px-6 py-3 rounded-full hover:shadow-lg transition">
+                                <i class="fas fa-plus mr-2"></i>
+                                Ajouter une transaction
+                            </a>
                         </div>
-                        <p class="text-gray-500 mb-3">Aucune transaction pour le moment</p>
-                        <a href="/transactions/new" class="inline-block bg-gradient-to-r from-pink-400 to-rose-400 text-white px-6 py-3 rounded-full hover:shadow-lg transition">
-                            <i class="fas fa-plus mr-2"></i>
-                            Ajouter une transaction
-                        </a>
-                    </div>
+                    <% } %>
                 </div>
             </div>
 
-            <!-- Objectifs d'épargne -->
+            <!-- Budgets actifs -->
             <div class="bg-white/80 backdrop-blur rounded-3xl shadow-xl p-8 border-2 border-purple-100">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-bold text-gray-800 flex items-center">
-                        <i class="fas fa-star text-amber-400 mr-3"></i>
-                        Mes Objectifs
+                        <i class="fas fa-chart-pie text-purple-400 mr-3"></i>
+                        Mes Budgets
                     </h3>
-                    <a href="/savings" class="text-purple-500 hover:text-purple-600 text-sm font-medium">
+                    <a href="/budgets" class="text-purple-500 hover:text-purple-600 text-sm font-medium">
                         Voir tout →
                     </a>
                 </div>
                 <div class="space-y-4">
-                    <div class="text-center py-12">
-                        <div class="inline-block bg-purple-100 rounded-full p-6 mb-4">
-                            <i class="fas fa-bullseye text-purple-400 text-4xl"></i>
+                    <% if (recentBudgets && recentBudgets.length > 0) { %>
+                        <% recentBudgets.slice(0, 3).forEach(budget => { %>
+                            <div class="p-4 bg-gray-50 rounded-xl">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-gray-800"><%= budget.category.name %></span>
+                                    <span class="text-sm text-gray-600"><%= budget.percentage.toFixed(0) %>%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                    <div class="h-full rounded-full <%= budget.isOverBudget ? 'bg-red-500' : budget.isNearLimit ? 'bg-orange-500' : 'bg-green-500' %>" 
+                                         style="width: <%= Math.min(100, budget.percentage) %>%">
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="text-center py-12">
+                            <div class="inline-block bg-purple-100 rounded-full p-6 mb-4">
+                                <i class="fas fa-chart-pie text-purple-400 text-4xl"></i>
+                            </div>
+                            <p class="text-gray-500 mb-3">Aucun budget défini</p>
+                            <a href="/budgets/create" class="inline-block bg-gradient-to-r from-purple-400 to-indigo-400 text-white px-6 py-3 rounded-full hover:shadow-lg transition">
+                                <i class="fas fa-plus mr-2"></i>
+                                Créer un budget
+                            </a>
                         </div>
-                        <p class="text-gray-500 mb-3">Aucun objectif défini</p>
-                        <a href="/savings/new" class="inline-block bg-gradient-to-r from-purple-400 to-indigo-400 text-white px-6 py-3 rounded-full hover:shadow-lg transition">
-                            <i class="fas fa-plus mr-2"></i>
-                            Créer un objectif
-                        </a>
-                    </div>
+                    <% } %>
                 </div>
             </div>
         </div>

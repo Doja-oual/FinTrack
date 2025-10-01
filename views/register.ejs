@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - FinSolutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 50%, #c2e9fb 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .input-focus:focus {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="relative overflow-x-hidden">
+
+    <!-- Éléments décoratifs flottants -->
+    <div class="absolute top-20 left-10 w-24 h-24 bg-pink-300 rounded-full opacity-30 blur-3xl floating"></div>
+    <div class="absolute top-40 right-20 w-32 h-32 bg-purple-300 rounded-full opacity-30 blur-3xl floating" style="animation-delay: 1s;"></div>
+    <div class="absolute bottom-20 left-1/4 w-28 h-28 bg-blue-300 rounded-full opacity-30 blur-3xl floating" style="animation-delay: 2s;"></div>
+
+    <!-- Navbar -->
+    <nav class="glass-card shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center space-x-2 group">
+                    <span class="text-3xl transform group-hover:scale-110 transition">💰</span>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+                        FinSolutions
+                    </span>
+                </a>
+                <a href="/login" class="text-purple-600 hover:text-pink-600 font-semibold px-4 py-2 rounded-lg hover:bg-purple-50 transition">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Connexion
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container Principal -->
+    <div class="container mx-auto px-4 py-6 pb-12">
+        <div class="max-w-md mx-auto mt-4 mb-8">
+            
+            <!-- Card d'Inscription -->
+            <div class="glass-card rounded-3xl shadow-2xl overflow-hidden">
+                
+                <!-- Header avec Animation -->
+                <div class="bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 p-6 text-center relative overflow-hidden">
+                    <!-- Cercles décoratifs -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                    
+                    <div class="relative">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/30 backdrop-blur-lg mb-3 shadow-lg">
+                            <i class="fas fa-sparkles text-3xl text-white"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white mb-1">Bienvenue !</h2>
+                        <p class="text-white/90 text-sm">Créez votre compte en quelques clics</p>
+                    </div>
+                </div>
+
+                <!-- Body du Formulaire -->
+                <div class="p-6">
+                    
+                    <!-- Message d'Erreur -->
+                    <% if (error) { %>
+                        <div class="mb-4 bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-400 p-3 rounded-xl shadow-sm animate-pulse">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-xs font-semibold text-red-800">Oups !</p>
+                                    <p class="text-xs text-red-700 mt-1"><%= error %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Message de Succès -->
+                    <% if (success) { %>
+                        <div class="mb-4 bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-400 p-3 rounded-xl shadow-sm">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check-circle text-green-500 text-lg"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-xs font-semibold text-green-800">Parfait !</p>
+                                    <p class="text-xs text-green-700 mt-1"><%= success %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Formulaire -->
+                    <form method="POST" action="/register" id="registerForm" class="space-y-4">
+                        
+                        <!-- Prénom -->
+                        <div class="relative">
+                            <label for="firstName" class="flex items-center text-xs font-semibold text-gray-700 mb-1.5">
+                                <span class="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full mr-2">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </span>
+                                Prénom
+                                <span class="text-pink-500 ml-1">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="firstName" 
+                                name="firstName" 
+                                required
+                                placeholder="Entrez votre prénom"
+                                class="input-focus w-full px-3 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all outline-none bg-white/50"
+                            >
+                        </div>
+
+                        <!-- Nom -->
+                        <div class="relative">
+                            <label for="lastName" class="flex items-center text-xs font-semibold text-gray-700 mb-1.5">
+                                <span class="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full mr-2">
+                                    <i class="fas fa-user-tag text-white text-xs"></i>
+                                </span>
+                                Nom (optionnel)
+                            </label>
+                            <input 
+                                type="text" 
+                                id="lastName" 
+                                name="lastName"
+                                placeholder="Entrez votre nom"
+                                class="input-focus w-full px-3 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all outline-none bg-white/50"
+                            >
+                        </div>
+
+                        <!-- Email -->
+                        <div class="relative">
+                            <label for="email" class="flex items-center text-xs font-semibold text-gray-700 mb-1.5">
+                                <span class="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full mr-2">
+                                    <i class="fas fa-envelope text-white text-xs"></i>
+                                </span>
+                                Email
+                                <span class="text-pink-500 ml-1">*</span>
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                required
+                                placeholder="exemple@email.com"
+                                class="input-focus w-full px-3 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all outline-none bg-white/50"
+                            >
+                        </div>
+
+                        <!-- Mot de Passe -->
+                        <div class="relative">
+                            <label for="password" class="flex items-center text-xs font-semibold text-gray-700 mb-1.5">
+                                <span class="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-pink-400 to-rose-400 rounded-full mr-2">
+                                    <i class="fas fa-lock text-white text-xs"></i>
+                                </span>
+                                Mot de passe
+                                <span class="text-pink-500 ml-1">*</span>
+                            </label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                required
+                                minlength="6"
+                                placeholder="Minimum 6 caractères"
+                                class="input-focus w-full px-3 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all outline-none bg-white/50"
+                            >
+                            <p class="text-xs text-gray-500 mt-1 flex items-center">
+                                <i class="fas fa-info-circle text-pink-400 mr-1"></i>
+                                Minimum 6 caractères
+                            </p>
+                        </div>
+
+                        <!-- Confirmer Mot de Passe -->
+                        <div class="relative">
+                            <label for="confirmPassword" class="flex items-center text-xs font-semibold text-gray-700 mb-1.5">
+                                <span class="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full mr-2">
+                                    <i class="fas fa-check-double text-white text-xs"></i>
+                                </span>
+                                Confirmer le mot de passe
+                                <span class="text-pink-500 ml-1">*</span>
+                            </label>
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                name="confirmPassword" 
+                                required
+                                minlength="6"
+                                placeholder="Retapez votre mot de passe"
+                                class="input-focus w-full px-3 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition-all outline-none bg-white/50"
+                            >
+                        </div>
+
+                        <!-- Bouton d'Inscription -->
+                        <button 
+                            type="submit" 
+                            class="btn-gradient w-full text-white font-bold py-3 rounded-xl shadow-lg mt-4"
+                        >
+                            <i class="fas fa-magic mr-2"></i>
+                            Créer mon compte
+                        </button>
+
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="relative my-5">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t-2 border-gray-200"></div>
+                        </div>
+                        <div class="relative flex justify-center">
+                            <span class="px-3 bg-white text-xs font-medium text-gray-500">
+                                <i class="fas fa-heart text-pink-400"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Lien vers Connexion -->
+                    <div class="text-center">
+                        <p class="text-gray-600 text-sm">
+                            Déjà membre ?
+                            <a href="/login" class="font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent hover:from-purple-500 hover:to-pink-500 transition ml-1">
+                                Se connecter
+                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                            </a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-4 mb-4">
+                <p class="text-gray-600 text-xs">
+                    <i class="fas fa-shield-alt text-purple-500 mr-1"></i>
+                    Vos données sont sécurisées et protégées
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Validation JavaScript -->
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 p-4 rounded-lg shadow-lg z-50 animate-pulse';
+                alertDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-500 text-xl mr-3"></i>
+                        <p class="text-red-800 font-semibold">Les mots de passe ne correspondent pas !</p>
+                    </div>
+                `;
+                document.body.appendChild(alertDiv);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                return false;
+            }
+
+            if (password.length < 6) {
+                e.preventDefault();
+                
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'fixed top-4 right-4 bg-orange-100 border-l-4 border-orange-500 p-4 rounded-lg shadow-lg z-50 animate-pulse';
+                alertDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-orange-500 text-xl mr-3"></i>
+                        <p class="text-orange-800 font-semibold">Le mot de passe doit contenir au moins 6 caractères !</p>
+                    </div>
+                `;
+                document.body.appendChild(alertDiv);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                return false;
+            }
+        });
+    </script>
+
+</body>
+</html>
