@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques - FinSolutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="/dashboard" class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    💰 FinSolutions
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="/transactions" class="text-gray-600 hover:text-purple-600">Transactions</a>
+                    <a href="/budgets" class="text-gray-600 hover:text-purple-600">Budgets</a>
+                    <a href="/statistics" class="text-purple-600 font-semibold">Statistiques</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Statistiques Financières</h1>
+
+        <!-- Graphiques -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Graphique Revenus vs Dépenses -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Revenus vs Dépenses (6 derniers mois)</h3>
+                <canvas id="incomeExpenseChart"></canvas>
+            </div>
+
+            <!-- Graphique Camembert des Catégories -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Répartition des Dépenses par Catégorie</h3>
+                <canvas id="categoryPieChart"></canvas>
+            </div>
+
+            <!-- Graphique d'évolution -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Évolution du Solde</h3>
+                <canvas id="balanceChart"></canvas>
+            </div>
+
+            <!-- Graphique des Budgets -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Utilisation des Budgets</h3>
+                <canvas id="budgetChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Données du serveur
+        const monthlyData = <%- JSON.stringify(monthlyData) %>;
+        const categoryData = <%- JSON.stringify(categoryData) %>;
+        const budgetData = <%- JSON.stringify(budgetData) %>;
+
+        // Configuration commune
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        };
+
+        // 1. Graphique Revenus vs Dépenses
+        new Chart(document.getElementById('incomeExpenseChart'), {
+            type: 'bar',
+            data: {
+                labels: monthlyData.labels,
+                datasets: [
+                    {
+                        label: 'Revenus',
+                        data: monthlyData.income,
+                        backgroundColor: 'rgba(34, 197, 94, 0.8)',
+                        borderColor: 'rgb(34, 197, 94)',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Dépenses',
+                        data: monthlyData.expenses,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: 'rgb(239, 68, 68)',
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: commonOptions
+        });
+
+        // 2. Graphique Camembert des Catégories
+        new Chart(document.getElementById('categoryPieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: categoryData.labels,
+                datasets: [{
+                    data: categoryData.amounts,
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(234, 179, 8, 0.8)',
+                        'rgba(168, 85, 247, 0.8)',
+                        'rgba(236, 72, 153, 0.8)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...commonOptions,
+                plugins: {
+                    ...commonOptions.plugins,
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed.toFixed(2) + ' MAD';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. Graphique d'évolution du Solde
+        new Chart(document.getElementById('balanceChart'), {
+            type: 'line',
+            data: {
+                labels: monthlyData.labels,
+                datasets: [{
+                    label: 'Solde',
+                    data: monthlyData.balance,
+                    borderColor: 'rgb(168, 85, 247)',
+                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        // 4. Graphique des Budgets
+        new Chart(document.getElementById('budgetChart'), {
+            type: 'bar',
+            data: {
+                labels: budgetData.labels,
+                datasets: [
+                    {
+                        label: 'Dépensé',
+                        data: budgetData.spent,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)'
+                    },
+                    {
+                        label: 'Budget',
+                        data: budgetData.budget,
+                        backgroundColor: 'rgba(34, 197, 94, 0.8)'
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

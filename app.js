@@ -10,6 +10,8 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const methodOverride = require('method-override');
+
 
 // Importation de la base de données et des modèles
 const { testConnection, syncDatabase, Transaction, Budget, Category } = require('./models');
@@ -40,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware pour parser les données des formulaires
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 
 // Configuration des sessions
 app.use(session({
@@ -105,6 +108,7 @@ app.use('/', transactionRoutes);
 
 // Routes budgets
 app.use('/', budgetRoutes);
+
 
 // Route Dashboard avec données complètes
 app.get('/dashboard', requireAuth, async (req, res) => {

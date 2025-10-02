@@ -1,7 +1,3 @@
-// ============================================
-// Routes Transactions avec Controller
-// Fichier: routes/transactions.js
-// ============================================
 
 const express = require('express');
 const router = express.Router();

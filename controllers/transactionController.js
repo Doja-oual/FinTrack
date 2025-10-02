@@ -1,7 +1,3 @@
-// ============================================
-// Transaction Controller
-// Fichier: controllers/transactionController.js
-// ============================================
 
 const { Transaction, Category } = require('../models');
 const { Op } = require('sequelize');
