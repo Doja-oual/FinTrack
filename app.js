@@ -13,6 +13,7 @@ const path = require('path');
 const methodOverride = require('method-override');
 
 
+
 // Importation de la base de données et des modèles
 const { testConnection, syncDatabase, Transaction, Budget, Category } = require('./models');
 const { Op } = require('sequelize');
@@ -22,6 +23,7 @@ const authRoutes = require('./routes/auth');
 const categoryRoutes = require('./routes/categories');
 const transactionRoutes = require('./routes/transactions');
 const budgetRoutes = require('./routes/budgets');
+const indexRoutes =require('./routes/index');
 
 // Initialisation de l'application Express
 const app = express();
@@ -108,6 +110,8 @@ app.use('/', transactionRoutes);
 
 // Routes budgets
 app.use('/', budgetRoutes);
+
+app.use('/',indexRoutes);
 
 
 // Route Dashboard avec données complètes

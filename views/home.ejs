@@ -3,83 +3,634 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil - FinSolutions</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-gradient-to-br from-purple-50 to-pink-50 min-h-screen">
+    <title><%= title %> - FinSolutions</title>
     
-    <div class="container mx-auto px-4 py-16">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rose-pale': '#FFF5F7',
+                        'rose-clair': '#FFE4E9',
+                        'rose-pastel': '#FFB6C8',
+                        'rose-doux': '#FF8FAB',
+                        'rose-profond': '#E85D8A',
+                        'lavande-pale': '#F5F3FF',
+                        'lavande': '#E9E3FF',
+                        'lavande-doux': '#C7B8EA',
+                        'mauve': '#9B87D5',
+                        'bleu-ciel': '#E8F4FD',
+                        'bleu-pastel': '#B8D8F0',
+                        'peche': '#FFE5D9',
+                        'mint': '#E8F5F1',
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
         
+        .gradient-rose {
+            background: linear-gradient(135deg, #FFE4E9 0%, #E9E3FF 100%);
+        }
         
-        <div class="text-center mb-16">
-            <h1 class="text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
-                 FinSolutions
-            </h1>
-            <p class="text-xl text-gray-600 mb-8">
-                Gérez vos finances personnelles en toute simplicité
+        .gradient-lavande {
+            background: linear-gradient(135deg, #F5F3FF 0%, #E8F4FD 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #E85D8A 0%, #9B87D5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #FF8FAB 0%, #E85D8A 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #E85D8A 0%, #C74570 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(232, 93, 138, 0.3);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-shadow:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pattern-dots {
+            background-image: radial-gradient(circle, #FFB6C8 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="/" class="flex items-center space-x-2 group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-rose-doux to-mauve rounded-xl flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform">
+                        F
+                    </div>
+                    <span class="text-2xl font-bold text-gradient">FinSolutions</span>
+                </a>
+                
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#fonctionnalites" class="text-gray-600 hover:text-rose-profond transition font-medium">Fonctionnalités</a>
+                    <a href="#avantages" class="text-gray-600 hover:text-rose-profond transition font-medium">Avantages</a>
+                    <a href="#tarifs" class="text-gray-600 hover:text-rose-profond transition font-medium">Tarifs</a>
+                    <a href="#contact" class="text-gray-600 hover:text-rose-profond transition font-medium">Contact</a>
+                    <a href="/login" class="text-gray-700 hover:text-rose-profond transition font-medium">
+                        <i class="fas fa-sign-in-alt mr-1"></i> Connexion
+                    </a>
+                    <a href="/register" class="btn-gradient text-white px-6 py-2.5 rounded-full font-semibold">
+                        Commencer
+                    </a>
+                </div>
+
+                <!-- Menu Mobile -->
+                <button class="md:hidden text-gray-600 hover:text-rose-profond">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 gradient-rose relative overflow-hidden">
+        <div class="absolute inset-0 pattern-dots"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Contenu gauche -->
+                <div class="space-y-8">
+                    <h1 class="text-5xl md:text-6xl font-playfair font-bold text-gray-800 leading-tight">
+                        Gérez vos finances avec
+                        <span class="text-gradient block mt-2">élégance</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 leading-relaxed">
+                        Une solution moderne et intuitive pour prendre le contrôle de votre budget personnel. 
+                        Simple, sécurisée et conçue pour vous.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="/register" class="btn-gradient text-white px-8 py-4 rounded-full font-semibold text-lg text-center">
+                            <i class="fas fa-rocket mr-2"></i>
+                            Essayer gratuitement
+                        </a>
+                        <a href="#fonctionnalites" class="bg-white text-rose-profond px-8 py-4 rounded-full font-semibold text-lg border-2 border-rose-pastel hover:bg-rose-pale transition text-center">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            Découvrir
+                        </a>
+                    </div>
+                    <div class="flex items-center space-x-6 text-sm text-gray-600">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-success mr-2"></i>
+                            <span>Gratuit à vie</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-shield-alt text-mauve mr-2"></i>
+                            <span>100% sécurisé</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-heart text-rose-doux mr-2"></i>
+                            <span>Sans publicité</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image/Illustration droite -->
+                <div class="relative">
+                    <div class="float-animation">
+                        <div class="bg-white rounded-3xl p-8 shadow-2xl">
+                            <div class="space-y-6">
+                                <!-- Mini dashboard preview -->
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-semibold text-gray-800">Vue d'ensemble</h3>
+                                    <span class="text-xs bg-mint text-green-700 px-3 py-1 rounded-full">Ce mois</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-gradient-to-br from-success/20 to-mint p-4 rounded-2xl">
+                                        <p class="text-xs text-gray-600 mb-1">Revenus</p>
+                                        <p class="text-2xl font-bold text-green-700">8,250 MAD</p>
+                                    </div>
+                                    <div class="bg-gradient-to-br from-rose-clair to-peche p-4 rounded-2xl">
+                                        <p class="text-xs text-gray-600 mb-1">Dépenses</p>
+                                        <p class="text-2xl font-bold text-rose-profond">5,680 MAD</p>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-lavande to-bleu-ciel p-4 rounded-2xl">
+                                    <p class="text-xs text-gray-600 mb-1">Économies</p>
+                                    <p class="text-3xl font-bold text-mauve">2,570 MAD</p>
+                                    <div class="mt-2 flex items-center text-success text-sm">
+                                        <i class="fas fa-arrow-up mr-1"></i>
+                                        <span>+31% ce mois</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decorative elements -->
+                    <div class="absolute -top-6 -right-6 w-24 h-24 bg-rose-pastel rounded-full opacity-50 blur-2xl"></div>
+                    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-lavande-doux rounded-full opacity-50 blur-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Fonctionnalités -->
+    <section id="fonctionnalites" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold text-gray-800 mb-4">
+                    Tout ce dont vous avez besoin
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Des outils puissants pour gérer votre argent intelligemment
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-rose-pale p-8 rounded-3xl card-shadow hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-rose-doux to-rose-profond rounded-2xl flex items-center justify-center text-white text-2xl mb-6">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Suivi en temps réel</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Visualisez vos dépenses et revenus instantanément avec des graphiques intuitifs et élégants.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-lavande-pale p-8 rounded-3xl card-shadow hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-lavande-doux to-mauve rounded-2xl flex items-center justify-center text-white text-2xl mb-6">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Budgets intelligents</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Définissez des objectifs et recevez des alertes personnalisées pour rester dans votre budget.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-bleu-ciel p-8 rounded-3xl card-shadow hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-bleu-pastel to-bleu-doux rounded-2xl flex items-center justify-center text-white text-2xl mb-6">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Analyses détaillées</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Découvrez vos habitudes de dépenses avec des rapports détaillés et des insights précieux.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-gradient-to-br from-mint to-white p-8 rounded-3xl card-shadow hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-6">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Catégories sur mesure</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Créez vos propres catégories avec des couleurs et des icônes personnalisées.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-gradient-to-br from-peche to-white p-8 rounded-3xl card-shadow hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-6">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Notifications smart</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Restez informé avec des alertes intelligentes adaptées à vos objectifs financiers.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-gradient-to-br from-rose-clair to-white p-8 rounded-3xl card-shadow hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-rose-pastel to-rose-profond rounded-2xl flex items-center justify-center text-white text-2xl mb-6">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sécurité maximale</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Vos données sont cryptées et protégées avec les standards de sécurité les plus élevés.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Avantages -->
+    <section id="avantages" class="py-20 gradient-lavande">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-playfair font-bold text-gray-800 mb-6">
+                        Pourquoi choisir <span class="text-gradient">FinSolutions</span> ?
+                    </h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-rose-profond flex-shrink-0 shadow-md">
+                                <i class="fas fa-check text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg mb-2">Interface intuitive</h4>
+                                <p class="text-gray-600">Design élégant et facile à utiliser, pensé pour une expérience agréable.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-mauve flex-shrink-0 shadow-md">
+                                <i class="fas fa-check text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg mb-2">100% gratuit</h4>
+                                <p class="text-gray-600">Aucun frais caché, toutes les fonctionnalités accessibles sans limite.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-bleu-doux flex-shrink-0 shadow-md">
+                                <i class="fas fa-check text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg mb-2">Accessible partout</h4>
+                                <p class="text-gray-600">Utilisez FinSolutions sur tous vos appareils, à tout moment.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-success flex-shrink-0 shadow-md">
+                                <i class="fas fa-check text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg mb-2">Support dédié</h4>
+                                <p class="text-gray-600">Une équipe à votre écoute pour vous accompagner dans votre gestion financière.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="bg-white rounded-3xl p-8 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1554224311-beee0c7raic?w=600" alt="Dashboard" class="rounded-2xl w-full" onerror="this.style.display='none'">
+                        <div class="absolute -bottom-6 -right-6 bg-rose-profond text-white p-6 rounded-2xl shadow-xl">
+                            <p class="text-sm mb-1">Satisfaction client</p>
+                            <p class="text-4xl font-bold">98%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Témoignages -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold text-gray-800 mb-4">
+                    Ils nous font confiance
+                </h2>
+                <p class="text-xl text-gray-600">Rejoignez des milliers d'utilisateurs satisfaits</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Témoignage 1 -->
+                <div class="bg-rose-pale p-8 rounded-3xl card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-rose-doux to-rose-profond rounded-full mr-4"></div>
+                        <div>
+                            <p class="font-bold text-gray-800">Sarah Martinez</p>
+                            <p class="text-sm text-gray-600">Entrepreneuse</p>
+                        </div>
+                    </div>
+                    <div class="text-rose-profond mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 italic">
+                        "FinSolutions a transformé ma façon de gérer mon argent. L'interface est magnifique et tellement simple à utiliser !"
+                    </p>
+                </div>
+
+                <!-- Témoignage 2 -->
+                <div class="bg-lavande-pale p-8 rounded-3xl card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-lavande-doux to-mauve rounded-full mr-4"></div>
+                        <div>
+                            <p class="font-bold text-gray-800">Amina Benali</p>
+                            <p class="text-sm text-gray-600">Designer</p>
+                        </div>
+                    </div>
+                    <div class="text-mauve mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 italic">
+                        "Enfin une application de gestion financière qui allie élégance et efficacité. Je la recommande à toutes mes amies !"
+                    </p>
+                </div>
+
+                <!-- Témoignage 3 -->
+                <div class="bg-bleu-ciel p-8 rounded-3xl card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-bleu-pastel to-bleu-doux rounded-full mr-4"></div>
+                        <div>
+                            <p class="font-bold text-gray-800">Leila Alaoui</p>
+                            <p class="text-sm text-gray-600">Étudiante</p>
+                        </div>
+                    </div>
+                    <div class="text-bleu-doux mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 italic">
+                        "Parfait pour gérer mon budget étudiant. Gratuit et sans publicités, c'est exactement ce que je cherchais !"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section CTA -->
+    <section class="py-20 gradient-rose relative overflow-hidden">
+        <div class="absolute inset-0 pattern-dots"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-4xl md:text-5xl font-playfair font-bold text-gray-800 mb-6">
+                Prête à prendre le contrôle de vos finances ?
+            </h2>
+            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Rejoignez FinSolutions aujourd'hui et commencez votre voyage vers la liberté financière
             </p>
-            
-            <div class="flex justify-center space-x-4">
-                <a href="/login" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold px-8 py-4 rounded-lg hover:from-purple-600 hover:to-pink-600 transition shadow-lg text-lg">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Se connecter
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/register" class="btn-gradient text-white px-10 py-4 rounded-full font-semibold text-lg inline-block">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Créer mon compte gratuitement
                 </a>
-                <a href="/register" class="bg-white text-purple-600 font-semibold px-8 py-4 rounded-lg hover:bg-gray-50 transition shadow-lg text-lg border-2 border-purple-600">
-                    <i class="fas fa-user-plus mr-2"></i>S'inscrire
+                <a href="/login" class="bg-white text-rose-profond px-10 py-4 rounded-full font-semibold text-lg border-2 border-rose-pastel hover:bg-rose-pale transition inline-block">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    J'ai déjà un compte
                 </a>
             </div>
         </div>
+    </section>
 
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition">
-                <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-chart-line text-3xl text-green-600"></i>
+    <!-- Footer -->
+    <footer class="bg-gray-50 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo et description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-rose-doux to-mauve rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                            F
+                        </div>
+                        <span class="text-2xl font-bold text-gradient">FinSolutions</span>
+                    </div>
+                    <p class="text-gray-600 mb-4 max-w-md">
+                        Votre partenaire de confiance pour une gestion financière élégante et efficace.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-rose-pale rounded-full flex items-center justify-center text-rose-profond hover:bg-rose-clair transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-lavande-pale rounded-full flex items-center justify-center text-mauve hover:bg-lavande transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-bleu-ciel rounded-full flex items-center justify-center text-bleu-doux hover:bg-bleu-pastel transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-mint rounded-full flex items-center justify-center text-green-600 hover:bg-green-100 transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Suivi des transactions</h3>
-                <p class="text-gray-600">Enregistrez et suivez toutes vos dépenses et revenus en temps réel</p>
+
+                <!-- Liens -->
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-4">Produit</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">Fonctionnalités</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">Tarifs</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">Sécurité</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-4">Entreprise</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">À propos</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">Blog</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">Carrières</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-rose-profond transition">Contact</a></li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition">
-                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-wallet text-3xl text-blue-600"></i>
+            <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 text-sm mb-4 md:mb-0">
+                    © 2025 FinSolutions. Tous droits réservés. Fait avec <i class="fas fa-heart text-rose-doux"></i> au Maroc
+                </p>
+                <div class="flex space-x-6 text-sm">
+                    <a href="#" class="text-gray-600 hover:text-rose-profond transition">Confidentialité</a>
+                    <a href="#" class="text-gray-600 hover:text-rose-profond transition">Conditions d'utilisation</a>
+                    <a href="#" class="text-gray-600 hover:text-rose-profond transition">Cookies</a>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Gestion des budgets</h3>
-                <p class="text-gray-600">Définissez des budgets par catégorie et suivez vos objectifs</p>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-xl transition">
-                <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-chart-pie text-3xl text-purple-600"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Statistiques détaillées</h3>
-                <p class="text-gray-600">Visualisez vos finances avec des graphiques et rapports</p>
             </div>
         </div>
-
-      
-        <div class="mt-16 text-center">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-                <div>
-                    <p class="text-4xl font-bold text-purple-600 mb-2">100%</p>
-                    <p class="text-gray-600">Gratuit</p>
-                </div>
-                <div>
-                    <p class="text-4xl font-bold text-purple-600 mb-2"></p>
-                    <p class="text-gray-600">Sécurisé</p>
-                </div>
-                <div>
-                    <p class="text-4xl font-bold text-purple-600 mb-2"></p>
-                    <p class="text-gray-600">Responsive</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <footer class="text-center py-8 text-gray-600">
-        <p>&copy; 2025 FinSolutions. Tous droits réservés.</p>
     </footer>
+
+    <!-- Script pour smooth scroll -->
+    <script>
+        // Smooth scroll pour les liens d'ancrage
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Appliquer l'animation aux éléments
+        document.querySelectorAll('.hover-lift, .card-shadow').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Menu mobile toggle
+        const mobileMenuButton = document.querySelector('.md\\:hidden button');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                alert('Menu mobile - À implémenter avec votre logique');
+            });
+        }
+
+        // Changement du header au scroll
+        let lastScroll = 0;
+        const nav = document.querySelector('nav');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll <= 0) {
+                nav.classList.remove('shadow-lg');
+                nav.classList.add('shadow-sm');
+            } else {
+                nav.classList.remove('shadow-sm');
+                nav.classList.add('shadow-lg');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Animation des chiffres (compteur)
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    element.textContent = target + '%';
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(start) + '%';
+                }
+            }, 16);
+        }
+
+        // Observer pour animer le compteur de satisfaction
+        const satisfactionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target.querySelector('.text-4xl');
+                    if (counter && !counter.dataset.animated) {
+                        counter.dataset.animated = 'true';
+                        animateCounter(counter, 98);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const satisfactionCard = document.querySelector('.shadow-xl');
+        if (satisfactionCard) {
+            satisfactionObserver.observe(satisfactionCard);
+        }
+    </script>
 
 </body>
 </html>
