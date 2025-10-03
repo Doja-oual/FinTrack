@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const User = sequelize.define('User', {
   id: {
@@ -36,6 +37,17 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
     field: 'is_active'
+  },
+
+  resetPasswordToken: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    field: 'reset_password_token'
+  },
+  resetPasswordExpires: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'reset_password_expires'
   }
 }, {
   tableName: 'users',
@@ -57,9 +69,29 @@ const User = sequelize.define('User', {
   }
 });
 
-// Méthode pour vérifier le mot de passe
+
 User.prototype.checkPassword = async function(password) {
   return await bcrypt.compare(password, this.password);
+};
+
+// 
+// Générer un token de réinitialisation
+
+User.prototype.generatePasswordResetToken = async function() {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  this.resetPasswordExpires = Date.now() + 3600000;
+
+  // Sauvegarder les modifications
+  await this.save();
+
+  
+  return resetToken;
 };
 
 module.exports = User;

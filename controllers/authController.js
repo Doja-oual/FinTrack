@@ -25,7 +25,7 @@ const authController = {
       console.log('  Password:', password ? '***' : 'MANQUANT');
       console.log('  Confirm:', confirmPassword ? '***' : 'MANQUANT');
 
-      // === VALIDATION DES CHAMPS ===
+      
       if (!firstName || !email || !password) {
         console.log(' Validation échouée: champs manquants');
         return res.render('register', {
@@ -35,7 +35,7 @@ const authController = {
         });
       }
 
-      // Vérifier la longueur du mot de passe
+      
       if (password.length < 6) {
         console.log(' Mot de passe trop court');
         return res.render('register', {
@@ -56,7 +56,7 @@ const authController = {
       }
 
     
-      console.log('🔍 Vérification si email existe déjà...');
+      console.log(' Vérification si email existe déjà...');
       const existingUser = await User.findOne({ 
         where: { email: email.toLowerCase().trim() } 
       });
@@ -93,14 +93,13 @@ const authController = {
 
       const newUser = await User.create(userData);
 
-      console.log(' UTILISATEUR CRÉÉ AVEC SUCCÈS ! ✅');
+      console.log(' UTILISATEUR CRÉÉ AVEC SUCCÈS ! ');
       console.log('    ID:', newUser.id);
       console.log('    Email:', newUser.email);
       console.log('    Prénom:', newUser.firstName);
       console.log('    Créé le:', newUser.createdAt);
       console.log('========== FIN INSCRIPTION RÉUSSIE ==========\n');
 
-      // Rediriger vers la page de connexion avec message de succès
       return res.render('login', {
         title: 'Connexion',
         error: null,
@@ -122,7 +121,6 @@ const authController = {
       console.error(error.stack);
       console.error('=========================================\n');
       
-      // Gestion des erreurs de validation Sequelize
       if (error.name === 'SequelizeValidationError') {
         const errorMessages = error.errors.map(e => e.message).join(', ');
         console.error('Erreurs de validation:', errorMessages);
@@ -179,7 +177,7 @@ const authController = {
       }
 
       // Chercher l'utilisateur
-      console.log('🔍 Recherche de l\'utilisateur...');
+      console.log(' Recherche de l\'utilisateur...');
       const user = await User.findOne({ 
         where: { email: email.toLowerCase().trim() } 
       });
@@ -232,7 +230,7 @@ const authController = {
       console.log(' Session créée pour:', user.email);
       console.log('========== CONNEXION RÉUSSIE ==========\n');
 
-      // Rediriger vers le tableau de bord
+      
       res.redirect('/dashboard');
 
     } catch (error) {
@@ -251,7 +249,7 @@ const authController = {
 
   logout: (req, res) => {
     const userEmail = req.session.user ? req.session.user.email : 'Utilisateur';
-    console.log('👋 Déconnexion de:', userEmail);
+    console.log(' Déconnexion de:', userEmail);
     
     req.session.destroy((err) => {
       if (err) {
@@ -262,5 +260,17 @@ const authController = {
     });
   }
 };
+
+//postResetPassword
+
+// export const postResetPassword= async (req,res)=>{
+//   const{ token } =req.params;
+//   const passwordResetData =await getResetPasswordToken(token);
+//   if(!passwordResetData){
+//     req.flash("errors","password token is not matching");
+//     return res.render("auth/wrong-reset-password-token");
+//   } 
+// }
+
 
 module.exports = authController;
