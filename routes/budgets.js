@@ -1,7 +1,3 @@
-// ============================================
-// Routes Budgets avec Controller
-// Fichier: routes/budgets.js
-// ============================================
 
 const express = require('express');
 const router = express.Router();
