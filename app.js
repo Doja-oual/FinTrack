@@ -20,6 +20,7 @@ const transactionRoutes = require('./routes/transactions');
 const budgetRoutes = require('./routes/budgets');
 const indexRoutes =require('./routes/index');
 const profileRoutes = require('./routes/profile'); 
+const savingsGoalRoutes = require('./routes/savingsGoal');
 
 
 
@@ -31,11 +32,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// ============================================
-// MIDDLEWARES
-// ============================================
 
-// Middleware pour servir les fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware pour parser les données des formulaires
@@ -110,6 +107,7 @@ app.use('/',indexRoutes);
 
 
 app.use('/profile', profileRoutes);
+app.use('/savings-goals', savingsGoalRoutes);
 
 
 // Route Dashboard avec données complètes

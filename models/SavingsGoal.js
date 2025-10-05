@@ -1,4 +1,3 @@
-
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
@@ -8,16 +7,19 @@ const SavingsGoal = sequelize.define('SavingsGoal', {
     primaryKey: true,
     autoIncrement: true
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'user_id',
+    references: {
+      model: 'users',
+      key: 'id'
+    },
+    onDelete: 'CASCADE'
+  },
   name: {
     type: DataTypes.STRING(100),
-    allowNull: false,
-    validate: {
-      notEmpty: { msg: 'Le nom est obligatoire' },
-      len: {
-        args: [3, 100],
-        msg: 'Le nom doit contenir entre 3 et 100 caractères'
-      }
-    }
+    allowNull: false
   },
   description: {
     type: DataTypes.TEXT,
@@ -26,25 +28,12 @@ const SavingsGoal = sequelize.define('SavingsGoal', {
   targetAmount: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
-    field: 'target_amount',
-    validate: {
-      min: {
-        args: [1],
-        msg: 'Le montant cible doit être supérieur à 0'
-      }
-    }
+    field: 'target_amount'
   },
   currentAmount: {
     type: DataTypes.DECIMAL(10, 2),
-    defaultValue: 0.00,
-    allowNull: false,
-    field: 'current_amount',
-    validate: {
-      min: {
-        args: [0],
-        msg: 'Le montant actuel ne peut pas être négatif'
-      }
-    }
+    defaultValue: 0,
+    field: 'current_amount'
   },
   targetDate: {
     type: DataTypes.DATEONLY,
@@ -54,22 +43,7 @@ const SavingsGoal = sequelize.define('SavingsGoal', {
   status: {
     type: DataTypes.ENUM('active', 'completed', 'paused'),
     defaultValue: 'active',
-    allowNull: false,
-    validate: {
-      isIn: {
-        args: [['active', 'completed', 'paused']],
-        msg: 'Le statut doit être active, completed ou paused'
-      }
-    }
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    field: 'user_id',
-    references: {
-      model: 'users',
-      key: 'id'
-    }
+    allowNull: false
   }
 }, {
   tableName: 'savings_goals',
@@ -77,37 +51,34 @@ const SavingsGoal = sequelize.define('SavingsGoal', {
   underscored: true
 });
 
-// Méthode pour calculer le pourcentage de progression
-SavingsGoal.prototype.getProgressPercentage = function() {
+// Méthodes d'instance
+SavingsGoal.prototype.getProgress = function() {
+  if (this.targetAmount === 0) return 0;
   return Math.min(100, (this.currentAmount / this.targetAmount) * 100);
 };
 
-// Méthode pour calculer le montant restant
 SavingsGoal.prototype.getRemainingAmount = function() {
   return Math.max(0, this.targetAmount - this.currentAmount);
 };
 
-// Méthode pour calculer les jours restants
 SavingsGoal.prototype.getDaysRemaining = function() {
   if (!this.targetDate) return null;
-  
   const today = new Date();
   const target = new Date(this.targetDate);
   const diffTime = target - today;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
-// Méthode pour vérifier si l'objectif est atteint
-SavingsGoal.prototype.isGoalReached = function() {
-  return this.currentAmount >= this.targetAmount;
+SavingsGoal.prototype.getRecommendedMonthlySaving = function() {
+  const daysRemaining = this.getDaysRemaining();
+  if (!daysRemaining || daysRemaining <= 0) return 0;
+  
+  const monthsRemaining = Math.max(1, daysRemaining / 30);
+  return this.getRemainingAmount() / monthsRemaining;
 };
 
-// Hook pour mettre à jour le statut automatiquement
-SavingsGoal.addHook('beforeSave', async (goal) => {
-  if (goal.currentAmount >= goal.targetAmount && goal.status !== 'completed') {
-    goal.status = 'completed';
-  }
-});
+SavingsGoal.prototype.isCompleted = function() {
+  return this.status === 'completed';
+};
 
 module.exports = SavingsGoal;

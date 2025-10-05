@@ -1,10 +1,11 @@
 
 const { sequelize, testConnection } = require('../config/database');
 const User = require('./User');
+const SavingsGoal = require('./SavingsGoal');
 const Category = require('./Category');
 const Transaction = require('./Transaction');
 const Budget = require('./Budget');
-const SavingsGoal = require('./SavingsGoal');
+
 
 
 // Relations User
@@ -119,8 +120,9 @@ module.exports = {
   testConnection,
   syncDatabase,
   User,
+  SavingsGoal,
   Category,
   Transaction,
-  Budget,
-  SavingsGoal
+  Budget
+
 };
