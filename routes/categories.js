@@ -1,7 +1,3 @@
-// ============================================
-// Routes Categories avec Controller
-// Fichier: routes/categories.js
-// ============================================
 
 const express = require('express');
 const router = express.Router();

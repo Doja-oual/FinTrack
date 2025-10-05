@@ -1,7 +1,3 @@
-// ============================================
-// Budget Controller
-// Fichier: controllers/budgetController.js
-// ============================================
 
 const { Budget, Category, Transaction } = require('../models');
 const { Op } = require('sequelize');

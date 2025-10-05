@@ -1,14 +1,10 @@
-// ============================================
-// Category Controller
-// Fichier: controllers/categoryController.js
-// ============================================
 
 const { Category } = require('../models');
 const { Op } = require('sequelize');
 
 class CategoryController {
   
-  // Liste des catégories
+
   async index(req, res) {
     try {
       const categories = await Category.findAll({
@@ -37,7 +33,6 @@ class CategoryController {
     }
   }
 
-  // Afficher formulaire de création
   async create(req, res) {
     res.render('categories/create', {
       title: 'Nouvelle Catégorie',
@@ -46,7 +41,6 @@ class CategoryController {
     });
   }
 
-  // Enregistrer une catégorie
   async store(req, res) {
     try {
       const { name, type, color, icon } = req.body;
@@ -95,7 +89,6 @@ class CategoryController {
     }
   }
 
-  // Afficher formulaire d'édition
   async edit(req, res) {
     try {
       const category = await Category.findOne({
@@ -121,7 +114,6 @@ class CategoryController {
     }
   }
 
-  // Mettre à jour une catégorie
   async update(req, res) {
     try {
       const { name, type, color, icon } = req.body;
@@ -170,7 +162,6 @@ class CategoryController {
     }
   }
 
-  // Supprimer une catégorie
   async destroy(req, res) {
     try {
       const category = await Category.findOne({

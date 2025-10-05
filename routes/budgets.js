@@ -10,7 +10,6 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-// Routes utilisant le contrôleur
 router.get('/budgets', requireAuth, budgetController.index);
 router.get('/budgets/create', requireAuth, budgetController.create);
 router.post('/budgets', requireAuth, budgetController.store);

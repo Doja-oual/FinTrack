@@ -80,8 +80,7 @@ async exportCSV(req, res) {
       order: [['date', 'DESC']]
     });
 
-    // Créer le CSV
-    let csv = '\uFEFF'; // BOM UTF-8
+    let csv = '\uFEFF'; 
     csv += 'Date,Description,Catégorie,Type,Montant\n';
 
     transactions.forEach(transaction => {
@@ -101,7 +100,7 @@ async exportCSV(req, res) {
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Length', Buffer.byteLength(csv, 'utf8'));
     
-    // Envoyer directement
+  
     return res.status(200).send(csv);
 
   } catch (error) {
@@ -110,7 +109,7 @@ async exportCSV(req, res) {
   }
 }
 
-  // Afficher formulaire de création
+
   async create(req, res) {
     try {
       const categories = await Category.findAll({
@@ -130,7 +129,6 @@ async exportCSV(req, res) {
     }
   }
 
-  // Enregistrer une transaction
   async store(req, res) {
     try {
       const { type, amount, description, date, categoryId } = req.body;
@@ -165,7 +163,6 @@ async exportCSV(req, res) {
     }
   }
 
-  // Afficher formulaire d'édition
   async edit(req, res) {
     try {
       const transaction = await Transaction.findOne({
