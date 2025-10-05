@@ -38,7 +38,7 @@ const User = sequelize.define('User', {
     defaultValue: true,
     field: 'is_active'
   },
-
+  
   resetPasswordToken: {
     type: DataTypes.STRING(255),
     allowNull: true,
@@ -74,8 +74,6 @@ User.prototype.checkPassword = async function(password) {
   return await bcrypt.compare(password, this.password);
 };
 
-// 
-// Générer un token de réinitialisation
 
 User.prototype.generatePasswordResetToken = async function() {
   const resetToken = crypto.randomBytes(32).toString('hex');
@@ -87,10 +85,10 @@ User.prototype.generatePasswordResetToken = async function() {
 
   this.resetPasswordExpires = Date.now() + 3600000;
 
-  // Sauvegarder les modifications
+  
   await this.save();
 
-  
+
   return resetToken;
 };
 
