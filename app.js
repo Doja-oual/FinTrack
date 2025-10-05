@@ -1,9 +1,4 @@
-// ============================================
-// FinSolutions - Application de Gestion de Budget
-// Fichier: app.js (Version Complète et Corrigée)
-// ============================================
 
-// Chargement des variables d'environnement
 require('dotenv').config();
 
 // Importation des modules nécessaires
@@ -24,8 +19,10 @@ const categoryRoutes = require('./routes/categories');
 const transactionRoutes = require('./routes/transactions');
 const budgetRoutes = require('./routes/budgets');
 const indexRoutes =require('./routes/index');
+const profileRoutes = require('./routes/profile'); 
 
-// Initialisation de l'application Express
+
+
 const app = express();
 
 // ============================================
@@ -82,9 +79,7 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-// ============================================
-// ROUTES
-// ============================================
+
 
 // Page d'accueil
 app.get('/', (req, res) => {
@@ -112,6 +107,9 @@ app.use('/', transactionRoutes);
 app.use('/', budgetRoutes);
 
 app.use('/',indexRoutes);
+
+
+app.use('/profile', profileRoutes);
 
 
 // Route Dashboard avec données complètes
