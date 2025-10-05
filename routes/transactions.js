@@ -1,9 +1,8 @@
-
 const express = require('express');
 const router = express.Router();
 const transactionController = require('../controllers/transactionController');
 
-// Middleware d'authentification
+// Middleware auth
 const requireAuth = (req, res, next) => {
   if (!req.session.user) {
     return res.redirect('/login');
@@ -11,12 +10,15 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-// Routes utilisant le contrôleur
-router.get('/transactions', requireAuth, transactionController.index);
-router.get('/transactions/create', requireAuth, transactionController.create);
-router.post('/transactions', requireAuth, transactionController.store);
-router.get('/transactions/:id/edit', requireAuth, transactionController.edit);
-router.post('/transactions/:id', requireAuth, transactionController.update);
-router.post('/transactions/:id/delete', requireAuth, transactionController.destroy);
+router.use(requireAuth);
+
+// Routes
+router.get('/', transactionController.index.bind(transactionController));
+router.get('/create', transactionController.create.bind(transactionController));
+router.get('/export', transactionController.exportCSV.bind(transactionController)); // ⚠️ AVANT /:id
+router.post('/', transactionController.store.bind(transactionController));
+router.get('/:id/edit', transactionController.edit.bind(transactionController));
+router.post('/:id', transactionController.update.bind(transactionController));
+router.post('/:id/delete', transactionController.destroy.bind(transactionController));
 
 module.exports = router;

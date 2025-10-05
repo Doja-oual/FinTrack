@@ -98,8 +98,7 @@ app.use('/', authRoutes);
 app.use('/', categoryRoutes);
 
 // Routes transactions
-app.use('/', transactionRoutes);
-
+app.use('/transactions', transactionRoutes);
 // Routes budgets
 app.use('/', budgetRoutes);
 

@@ -1,4 +1,3 @@
-
 const { Transaction, Category } = require('../models');
 const { Op } = require('sequelize');
 
@@ -60,6 +59,56 @@ class TransactionController {
       });
     }
   }
+
+  // Export CSV
+async exportCSV(req, res) {
+  try {
+    const { startDate, endDate } = req.query;
+    const userId = req.session.user.id;
+
+    const where = { userId };
+
+    if (startDate && endDate) {
+      where.date = {
+        [Op.between]: [startDate, endDate]
+      };
+    }
+
+    const transactions = await Transaction.findAll({
+      where,
+      include: [{ model: Category, as: 'category' }],
+      order: [['date', 'DESC']]
+    });
+
+    // Créer le CSV
+    let csv = '\uFEFF'; // BOM UTF-8
+    csv += 'Date,Description,Catégorie,Type,Montant\n';
+
+    transactions.forEach(transaction => {
+      const date = new Date(transaction.date).toLocaleDateString('fr-FR');
+      const description = `"${(transaction.description || '').replace(/"/g, '""')}"`;
+      const category = transaction.category ? transaction.category.name : 'Sans catégorie';
+      const type = transaction.type === 'income' ? 'Revenu' : 'Dépense';
+      const amount = parseFloat(transaction.amount).toFixed(2);
+
+      csv += `${date},${description},${category},${type},${amount}\n`;
+    });
+
+    // Headers corrects
+    const filename = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
+    
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', Buffer.byteLength(csv, 'utf8'));
+    
+    // Envoyer directement
+    return res.status(200).send(csv);
+
+  } catch (error) {
+    console.error('Erreur export CSV:', error);
+    return res.status(500).send('Erreur lors de l\'export');
+  }
+}
 
   // Afficher formulaire de création
   async create(req, res) {
