@@ -21,6 +21,7 @@ const budgetRoutes = require('./routes/budgets');
 const indexRoutes =require('./routes/index');
 const profileRoutes = require('./routes/profile'); 
 const savingsGoalRoutes = require('./routes/savingsGoal');
+const dashboardController = require('./controllers/dashboardController');
 
 
 
@@ -108,6 +109,7 @@ app.use('/',indexRoutes);
 app.use('/profile', profileRoutes);
 app.use('/savings-goals', savingsGoalRoutes);
 
+app.get('/dashboard', requireAuth, dashboardController.index);
 
 // Route Dashboard avec données complètes
 app.get('/dashboard', requireAuth, async (req, res) => {
